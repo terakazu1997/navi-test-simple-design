@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>解答サンプル</title>
+    <link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+    <main>
+        <div id = "inContent">
+            <section class="answer-head">
+                <h3>テストお疲れ様でした！結果確認！！</h3>
+                <div class="result-message">
+                    <p class="large">xxxxxxxxさん、n問中n問正解です。</p>
+                        <p class="small">この資格は2xxx年xx月xx日まで有効です</p>
+                        <p class="small">全問正解すれば、資格を取得できます。</p>
+                </div>
+            </section>
+            <ul class="box">
+                <li class="question1-item">
+                    <h3 class="question-title">
+                        <ul>
+                            <li  class="question-cnt">Q11</li>
+                            <li><span>テスト</span></li>
+                        </ul>
+                    </h3>
+                    <ul class="choises">
+                        <li class="choise" >
+                            <div class="checkbox answer-check">
+                                <p class="small-circle">◯<span class="small-circle-sentence">これは</span></p>
+                                <p class="answer-border"></p>
+                                <input id="1" class="check" type="checkbox" checked="checked" disabled="disabled" >
+                                <label for="1"><span>tes2t</span></label>
+
+                            </div>
+                        </li>
+                        <li class="choise" >
+                                <div class="checkbox answer-check">
+                                    <p class="small-batsu">×<span class="small-batsu-sentence">これは</span></p>
+                                    <p class="answer-border"></p>
+                                    <input id="11" class="check" type="checkbox" checked="checked" disabled="disabled">
+                                    <label for="11"><span>test</span></label>
+                                </div>
+                        </li>
+                        <li class="choise" >
+                                <div class="checkbox">
+                                    <input id="21" class="check" type="checkbox" disabled="disabled">
+                                    <label for="21"><span>test</span></label>
+                                </div>
+                            </li>
+                        <li class="choise" >
+                                <div class="checkbox">
+                                    <input id="13" class="check" type="checkbox">
+                                    <label for="13"><span>test</span></label>
+                                </div>
+                            </li>    
+                    </ul>
+                    <ul class = "answer-layout answer-item answer-line clear-fix">
+                            <li class="answer answer-result">
+                                <p class="circle"></p>
+                                <p class="ok-ng">正解</p>
+                            </li>
+                            <li class="answer answer-sentence">
+                                <h3>テストの解説</h3>
+                                <p>解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説</p>
+                            </li>
+                        </ul>
+                </li>
+            
+
+        </ul>
+            <ul class = "answer-layout answer-item answer-line clear-fix">
+                    <li class="answer answer-result">
+                        <p class="square cross batsu"></p>
+                        <p class="ok-ng">不正解</p>
+                    </li>
+                    <li class="answer answer-sentence">
+                        <h3>解説</h3>
+                        <p>解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説解説</p>
+                    </li>
+                </ul>
+
+
+        <button id="send-answer" @click="restartClick">もう一度チャレンジ！！</button>
+        </div>
+    </main>
+</body>
+</html>

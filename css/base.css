@@ -1,0 +1,36 @@
+@import url("question-modal.css");
+@import url("question-sample1.css");
+@import url("answer-sample1.css");
+
+li{
+    list-style: none;
+}
+ul{
+    padding:0;
+    width: 100%;
+}
+main{
+    word-wrap: break-word;
+}
+main #inContent{
+    padding-top: 60px;
+    text-align:center;
+    min-width: 720px;
+    width: 95%;
+    margin: 0 auto;
+}
+
+.br-right{
+    border-right:solid 1px;
+}
+.br-bottom {
+    border-bottom:solid 1px;
+}
+.clear-fix::after{
+    content: "";
+    display: block;
+    clear: both;
+}
+p,span,input{
+    white-space: pre-wrap;
+}
