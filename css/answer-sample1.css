@@ -73,7 +73,7 @@ main #inContent .answer1-item .choices{
     display: flex;
 }
 
-main #inContent .answer1-item .users-answer ,
+main #inContent .answer1-item .users-answer,
 main #inContent .answer1-item .pass-answer{
     width: 50%;
     text-align: left;
