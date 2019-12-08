@@ -3,6 +3,11 @@ const router = new VueRouter({
     routes:[
         {
             path: '/',
+            name: 'questionTop',
+            component:questionTop
+        },
+        {
+            path: '/question-sample1',
             name:'questionSample1',
             component:questionSample1
         },

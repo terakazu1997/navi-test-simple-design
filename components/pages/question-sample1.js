@@ -2,35 +2,40 @@
 const questionSample1 = {
     template: (function() {/*
         <main>
-            <question-modal v-if="readyModal" @closemodal="closeReadyModal()" />
-            <div id = "inContent" v-if="!readyModal">
-                <timer @checkAnswer="checkAnswer"/>
+            <div id = "inContent">
+                <ul class="cp_stepflow01">
+                    <li v-if="currentIndex===0"class="completed"><span class="bubble"></span>テスト(1/2)</li>
+                    <li v-else class="bubble"><span class="bubble"></span>テスト(1/2)</li>
+                    <li v-if="currentIndex===0"class="bubble"><span class="bubble"></span>テスト(2/2)</li>
+                    <li v-else class="completed"><span class="bubble"></span>テスト(2/2)</li>
+                    <li class="bubble"><span class="bubble"></span>結果・解説</li>
+                </ul>
                 <ul class="box">
                     <li class="question1-item" v-for="(questionObject,itemIndex) in splitQuestionObjects[currentIndex]" :key="questionObject.questionId">
                         <h3 class="question-title">
                         <ul>
                             <li class="question-cnt" v-if="currentIndex===0">Q{{itemIndex + 1}} </li>
-                            <li  class="question-cnt" v-else>Q{{itemIndex + 6}} </li>
+                            <li class="question-cnt" v-else>Q{{itemIndex + 6}} </li>
                             <li><span>{{questionObject.question}}</span></li>
                         </ul>
                         </h3>
-                        <ul class="choises">
-                            <li class="choise" v-for="(choise,choiseIndex) in questionObject.choises" :key="choiseIndex">
+                        <ul class="choices">
+                            <li class="choice" v-for="(choice,choiceIndex) in questionObject.choices" :key="choiceIndex">
                                 <div class="checkbox">
-                                    <input v-if="currentIndex===0" :id="questionObject.questionId + choiseIndex" class="check" type="checkbox" v-model="usersAnswer" :value="itemIndex+1 + '-' + questionObject.questionId + '-' + choiseIndex">
-                                    <input v-else :id="questionObject.questionId + choiseIndex" class="check" type="checkbox" v-model="usersAnswer" :value="itemIndex+6 + '-' + questionObject.questionId + '-' + choiseIndex">
-                                    <label :for="questionObject.questionId + choiseIndex"><span>{{choise}}</span></label>
+                                    <input v-if="currentIndex===0" :id="questionObject.questionId + choiceIndex" class="check" type="checkbox" v-model="usersAnswer" :value="itemIndex+1 + '-' + questionObject.questionId + '-' + choiceIndex">
+                                    <input v-else :id="questionObject.questionId + choiceIndex" class="check" type="checkbox" v-model="usersAnswer" :value="itemIndex+6 + '-' + questionObject.questionId + '-' + choiceIndex">
+                                    <label :for="questionObject.questionId + choiceIndex"><span>{{choice}}</span></label>
                                 </div>
                             </li>
                         </ul>
                     </li>
                 </ul>
                 <p id="alert-msg">{{alertMessage}}</p>
-                <div class="prev-next-buttons clear-fix">
-                    <button class="prev-next-button" id="prev-button" v-if="currentIndex===1" @click="prevClick" aria-label="前へ">prev</button>
-                    <button class="prev-next-button" id="next-button" v-if="currentIndex===0" @click="nextClick" aria-label="次へ">next</button>
-                </div>              
-                <button id="send-answer" @click="checkAnswerClick">回答結果を確認</button>
+                <div class="under-buttons clear-fix">
+                    <button class="under-button" id="prev-button" v-if="currentIndex===1" @click="prevClick" aria-label="前へ">prev</button>
+                    <button class="under-button" id="next-button" v-if="currentIndex===0" @click="nextClick" aria-label="次へ">next</button>
+                    <button class="under-button" v-if="currentIndex === maxPageNumber　- 1" id="send-answer" @click="checkAnswerClick">回答送信</button>
+                </div>      
             </div>
         </main>
     */}).toString().match(/(?:\/\*(?:[\s\S]*?)\*\/)/).pop().replace(/^\/\*/, "").replace(/\*\/$/, ""),
@@ -43,21 +48,17 @@ const questionSample1 = {
                 questionObjects.concat().slice(-5)
             ],
             usersAnswer: [],//ユーザの回答（チェックボックスから選択された項目が格納される配列）
-            readyModal: true, //初期表示時のモーダルを表示非表示フラグ
-            questionCnt: questionObjects.length,//問題数
-            alertMessage: ''
+            pageQuestionCnt: 5, //1ページに表示する問題数
+            alertMessage: '',
+            checkChoicesFlg: true, //選択肢を確認判定用フラグ　初期値はtrue
+            checkErrorMessage: '' //アラート表示用メッセージ
         }
-    },
-    mounted: function(){
-        if(this.$route.params.fromAnswerFlg){
-            this.readyModal = false;
-        }
-    },
-    components: {
-        'timer': timer, //カウントダウンタイマー
-        'questionModal': questionModal //初期表示時のモーダル
     },
     computed: {
+        //最大のページ番号
+        maxPageNumber: function(){
+            return questionObjects.length / 5
+        },
         /*
         checkされた項目を整形する算出プロパティ　構成は下記
         ◯整形前(配列（中身が文字列))
@@ -73,7 +74,7 @@ const questionSample1 = {
         shapingusersAnswer: function(){
             var shapeCheckNameArray = []　//check項目整形用配列
             //check整形用配列初期値設定
-            for(var i=0; i<this.questionCnt; i++){
+            for(var i=0; i<this.questionObjects.length; i++){
                 shapeCheckNameArray.push({
                     questionNumber: 99999, //問題番号(99999を入れる理由：0にすると昇順にした時におかしくなる99999は使われることはない)
                     questionId: '', //問題id
@@ -88,7 +89,7 @@ const questionSample1 = {
             for(var i=0; i<this.usersAnswer.length;i++){
                 var usersAnswerplit = this.usersAnswer[i].split('-') //-で分解
                 //問題数の要素分繰り返す
-                for(var j=0; j<this.questionCnt; j++){
+                for(var j=0; j<this.questionObjects.length; j++){
                     //問題番号と、ユーザの回答の問題番号が等しければ、ユーザの回答を追加更新。j+1にしているのは、問題番号は1〜10であるため
                     if(j+1 === parseInt(usersAnswerplit[0])){
                         shapeCheckNameArray[j].questionNumber = parseInt(usersAnswerplit[0]) //問題番号を上書き
@@ -104,18 +105,46 @@ const questionSample1 = {
     },
 
     methods:{
-        //初期表示で受講開始ボタンを押下時にモーダルを閉じる
-        closeReadyModal: function() {
-            window.scrollTo(0,0)
-            this.readyModal = false
+        //問題の中で1つでも未選択の問題がないかを確認
+        checkChoices: function(){
+            this.alertMessage = ''
+            this.checkChoicesFlg=true 
+            //shapingeCheckNamsからキーがquestionNumberのもののみを取得
+            var questionNumbers = this.shapingusersAnswer.concat().map(function(row){
+                return[row['questionNumber']]
+                }).reduce(function(a,b){
+                    return a.concat(b)
+            })
+            this.checkErrorMessage='以下の問題の選択がされていません\n' 
+            /*
+            現在のページ*1ページに表示項目数(5)+1から、(現在のページ数 + 1)*1ページに表示項目数(5)回+1繰り返し。
+            （このようにしているのはページや表示項目が増えても対応できるように。
+            全て未選択の問題が出てくるたびにアラート表示用メッセージに問題番号を私、回答確認判定用フラグをfalseにする
+            繰り返しを1から問題数の+1までに未満にしている理由は問題番号は、1から始まるため。
+            */
+           for(var i=(this.currentIndex) * this.pageQuestionCnt +1; i < (this.currentIndex + 1 ) * this.pageQuestionCnt +1; i++){
+            if(questionNumbers.indexOf(i) === -1 ){
+                this.checkErrorMessage += 'Q'+i+' '
+                this.checkChoicesFlg = false
+            }
+        }
         },
+        //前のページへボタン押下時
         prevClick: function() {
-            this.currentIndex--;
+            this.currentIndex--
             window.scrollTo(0,0)
         },
+        //次のページへボタン押下時
         nextClick: function() {
-            this.currentIndex++;
-            window.scrollTo(0,0)
+            this.checkChoices()
+            //選択判定用フラグがtrue→ページを1プラス。　false→alertを表示 
+            if(this.checkChoicesFlg){
+                this.currentIndex++
+                window.scrollTo(0,0)
+            }else{
+                this.alertMessage = this.checkErrorMessage+'\nチェックをしてください'
+            }
+
         },
         //問題番号(1〜10)をキーに昇順に並べ替えを実行用(sortに渡すコールバック関数として機能)
         sortObjects: function(a,b) {
@@ -124,54 +153,22 @@ const questionSample1 = {
             return 0
         },
 
-        /*
-        回答結果を確認ボタン押下時に以下の処理を実行
-        問題1〜10の問題のうち回答が1つも選択されていない問題を確認
-            問題1〜10の問題全て選択された場合:
-            　　　checkAnswerを実行し、回答を確認する
-            それ以外(1つでも回答が1つも選択されていなかった時）の場合；
-                回答が1つも選択されていなかった問題番号を全てアラートで表示し回答を確認しない。
-        */
+        // 回答結果を確認ボタン押下時に以下の処理を実行
         checkAnswerClick: function () {
-            this.alertMessage = ''
-            var checkCount=1 //未選択の問題番号アラート表示用カウント
-            var checkAnswerFlg=true //回答を確認判定用フラグ　初期値はtrue
-            //shapingeCheckNamsからキーがquestionNumberのもののみを取得
-            var questionNumbers = this.shapingusersAnswer.concat().map(function(row){
-                return[row['questionNumber']]
-                }).reduce(function(a,b){
-                    return a.concat(b)
-                })
-            var checkErrorMessage='以下の問題の選択がされていません\n' //アラート表示用メッセージ
-            /*
-            10回繰り返し、1〜10のうち、全て未選択の問題がないかを確認。
-            全て未選択の問題が出てくるたびにアラート表示用メッセージに問題番号を私、回答確認判定用フラグをfalseにする
-            繰り返しを1から問題数の+1までに未満にしている理由は問題番号は0〜9ではなく、1〜10であるため
-            */
-            for(var i=1; i <this.questionCnt+1; i++){
-                if(questionNumbers.indexOf(i) === -1 ){
-                    checkErrorMessage += 'Q'+checkCount+' '
-                    checkAnswerFlg = false
-                }
-                checkCount++
-            }
-            //回答判定用フラグがtrue→checkAnswerを実行し回答確認　false→alertを表示
-            if(checkAnswerFlg){
+            this.checkChoices()
+            //選択判定用フラグがtrue→checkAnswerを実行し回答確認　false→alertを表示
+            if(this.checkChoicesFlg){
                 this.checkAnswer()
             }else{
-                this.alertMessage = checkErrorMessage+'\nチェックをしてください'
+                this.alertMessage = this.checkErrorMessage+'\nチェックをしてください'
             }
-        },
-        sessionUpdate: function() {
-            console.log('テスト')
         },
         //回答確認　確認後受講結果画面に遷移
         checkAnswer: function () {
             var okList = [];
-            for(var i=0; i<this.questionCnt; i++){
+            for(var i=0; i<this.questionObjects.length; i++){
                 okList[i] = false;
             }
-            console.log(okList)
             var okCnt = 0 //正解数
             //問題オブジェクトの要素数分、問題オブジェクトの[i]番目にusersAnswer（ユーザの回答：配列）を追加
             for(var i=0; i<this.questionObjects.length; i++){
@@ -183,16 +180,16 @@ const questionSample1 = {
                 var okFlg = true //正解フラグ 正解数を加算する判断材料の1つに使用
                 /*
                 ユーザの回答の[i]番目の要素数分（ユーザが選択した数分）繰り返す
-                answerStatusを更新んする。
+                answerStatusを更新する。
                 問題オブジェクトに、ユーザの回答を追加。また、ユーザの回答が問題オブジェクトの回答に存在しなければ正解フラグをfalseにする。
                 */
                 for(var j=0; j<usersAnswer[i].checkNumbers.length;j++){
                     this.questionObjects[i].usersAnswer.push(usersAnswer[i].checkNumbers[j])
                     if(this.questionObjects[i].answer.indexOf(usersAnswer[i].checkNumbers[j]) === -1 ){
-                        this.questionObjects[i].answerStatus[usersAnswer[i].checkNumbers[j]] = "間違った回答を選択"
+                        this.questionObjects[i].answerStatus[usersAnswer[i].checkNumbers[j]] = "ユーザの選択"
                         okFlg = false 
                     }else{
-                        this.questionObjects[i].answerStatus[usersAnswer[i].checkNumbers[j]] = "正解の回答を選択"
+                        this.questionObjects[i].answerStatus[usersAnswer[i].checkNumbers[j]] = "ユーザの選択"
                     }
                 }
                 /*
@@ -201,7 +198,6 @@ const questionSample1 = {
                 */
                 for(var j=0 ;j<this.questionObjects[i].answer.length; j++){
                     if(usersAnswer[i].checkNumbers.indexOf(this.questionObjects[i].answer[j]) === -1 ){
-                        this.questionObjects[i].answerStatus[this.questionObjects[i].answer[j]] = "正解の回答を未選択"
                         okFlg = false 
                     }
                 }
@@ -212,9 +208,13 @@ const questionSample1 = {
                 }
             }
             window.scrollTo(0,0)
-            console.log(this.questionObjects)
             //受講結果確認画面に遷移、遷移する時に正解数と正解リストと問題オブジェクトを渡す（ユーザの解答を含む）
             this.$router.push({name: 'answerSample1' ,params: {questionObjects: this.questionObjects,okCnt: okCnt,okList: okList }})
+        }
+    },
+    created: function() {
+        if(!this.$route.params.readyFlg){
+            this.$router.push({name: 'questionTop'})
         }
     }
 }

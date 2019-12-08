@@ -4,7 +4,7 @@
     width: 100%;
     margin-bottom: 38px;
     padding-bottom: 1em;
-    border:solid 1px #111;
+    border:solid 1px #C0C0C0;
 }
 
 #inContent .box .question1-item .question-title{
@@ -27,85 +27,79 @@
     max-width: 1000px;
 }
 .checkbox {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    margin-top: 28px;
     text-align: left;
-    margin:	0 0 10px 20px;
+    margin-left: 30px;
 }
 /* ラベルのスタイル　*/
 .checkbox label {
-	padding-left: 38px;			/* ラベルの位置 */
-    margin-bottom: 10px;
-	line-height: 22px;
-    display: inline-block;
-	cursor:	pointer;
-    position: relative;
-    width: 90%;
+    font-size: 16px;
+    bottom: 0;
+    margin-left: 36px;
+    cursor: pointer;
 }
 
-/* ボックスのスタイル */
-.checkbox label:before {
-	content: '';
-	width: 22px;			/* ボックスの横幅 */
-	height:	22px;			/* ボックスの縦幅 */
-	display: inline-block;
-	position: absolute;
-	left: 0;
-	background-color: #fff;
-	box-shadow:	 inset 1px 2px 2px 0px #000;
-	border-radius: 6px 6px 6px 6px;
+.checkbox label::before {
+    left: 10px;
+    margin-top: -18px;
+    width: 9px;
+    height: 24px;
+    border-right: 3px solid rgb(51,102,204);
+    border-bottom: 3px solid rgb(51,102,204);
+    transform: rotate(45deg);
+    opacity: 0;
+}
+.checkbox label::after {
+    left: 0;
+    margin-top: -12px;
+    width: 24px;
+    height: 24px;
+    border: 2px solid rgb(160,160,160);
+}
+.checkbox label::before,.checkbox label::after {
+    position: absolute;
+    content: "";
+    display: block;
+    top: 50%;
 }
 /* 元のチェックボックスを表示しない */
 .checkbox input[type=checkbox] {
 	display: none;
 }
 /* チェックした時のスタイル */
-.checkbox input[type=checkbox]:checked + label:before {
-    content: '\2713';		/* チェックの文字 */ 
-    font-size: 16px;			/* チェックのサイズ */
-	color: #fff;			/* チェックの色 */
-	background-color: #06f;			/* チェックした時の色 */
+.checkbox input[type=checkbox]:checked + label,
+.checkbox input[type=checkbox]:checked + label::before,
+.checkbox input[type=checkbox]:checked + label::after{
+    opacity: 1;
+    color: rgb(51,102,204);
+    border-color: rgb(51,102,204);
 }
-#send-answer{
-    font-size:18px;
-    background: #26c7d3;
-    border-radius: 3px;
-    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
-    color:#FFF;
-    border-bottom: solid 3px #5e7fca;
-    height: 60px;
-    width: 300px;
-}
-#send-answer:hover{
-    box-shadow: 0 0 5px 2px rgba(11, 148, 240, 0.815);
-}
-.prev-next-buttons .prev-next-button{
-    font-size:20px;
-    font-weight: bold;
-    border-radius: 3px;
-    text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
-    color:#111;
-    width: 15%;
-    border-bottom: solid 3px #5e7fca;
-    height: 50px;
-    padding-top: 5px;
+
+.under-buttons .under-button{
+    font-size: 16px;
+    width: 180px;
+    height: 40px;
+    border:1px solid rgb(13, 157, 13);
+    border-radius: 5px;
+    background-color: #fff;
+    color: rgb(13, 157, 13);
+    cursor: pointer;
 }
 
 #prev-button{
     float: left;
-    background: #74eb98;/*ボタン色*/
-    border:1px solid #09a1cf;
 }
-#prev-button :hover{
-    background: #06e047;/*ボタン色*/
+#prev-button:hover,#next-button:hover,#send-answer:hover{
+    background: rgb(217, 240, 217);
 }
 
-#next-button{
-    float:right;
-    background: #e7b76e;/*ボタン色*/
-    border:1px solid #09a1cf;
+#next-button,#send-answer{
+    float: right;
 }
-#next-button :hover{
-    background: #f19202;/*ボタン色*/
-}
+
 #alert-msg{
     height: 50px;
 }
