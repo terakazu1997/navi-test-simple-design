@@ -16,7 +16,7 @@ const questionSample1 = {
                         <ul>
                             <li class="question-cnt" v-if="currentIndex===0">Q{{itemIndex + 1}} </li>
                             <li class="question-cnt" v-else>Q{{itemIndex + 6}} </li>
-                            <li><span>{{questionObject.question}}</span></li>
+                            <li><span v-html="questionObject.question" /></li>
                         </ul>
                         </h3>
                         <ul class="choices">
@@ -24,7 +24,7 @@ const questionSample1 = {
                                 <div class="checkbox">
                                     <input v-if="currentIndex===0" :id="questionObject.questionId + choiceIndex" class="check" type="checkbox" v-model="usersAnswer" :value="itemIndex+1 + '-' + questionObject.questionId + '-' + choiceIndex">
                                     <input v-else :id="questionObject.questionId + choiceIndex" class="check" type="checkbox" v-model="usersAnswer" :value="itemIndex+6 + '-' + questionObject.questionId + '-' + choiceIndex">
-                                    <label :for="questionObject.questionId + choiceIndex"><span>{{choice}}</span></label>
+                                    <label class="choice-sentence" :for="questionObject.questionId + choiceIndex"><span v-html="choice" /></label>
                                 </div>
                             </li>
                         </ul>

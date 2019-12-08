@@ -83,20 +83,14 @@ main #inContent .answer1-item .pass-answer{
     padding-left: 10px;
 }
 
-main #inContent .answer1-item .users-answer p,
-main #inContent .answer1-item .pass-answer p{
+main #inContent .answer1-item .users-answer .answer-title,
+main #inContent .answer1-item .pass-answer .answer-title{
     background-color: #0066FF;
     color: #FFF;
     border:1px solid #C0C0C0;
     margin:-1px;
     font-weight: bold;
     padding: 10px;
-}
-main #inContent .answer1-item .users-answer li,
-main #inContent .answer1-item .pass-answer li{
-    border:1px solid #C0C0C0;
-    margin:-1px;
-    padding:5px;
 }
 
 main #inContent .answer1-item .question-explanation{
@@ -118,32 +112,41 @@ main #inContent .answer1-item .question-explanation .explanation{
     margin: 0;
     padding: 15px;
 }
-.no-check{
-    padding-left: 27px;
+
+
+main #inContent .answer1-item .pass-answer .choice,
+main #inContent .answer1-item .users-answer .choice{
+    min-height: 35px;
+    border:1px solid #C0C0C0;
+    margin:-1px;
+    padding:5px;
+    display: flex;
+    align-items: center;
+    position: relative;
 }
 
-.pass-check{
+.choice .pass-check{
     background-color:#CCFFFF;
-    color: #0066FF;
-    display: inline-block;
+    display: flex;
     width: 20px;
     height: 20px;
+    position: absolute;
 }
 .small-circle{
     font-size: 20px;
     font-weight: 800;
-    background-color:#CCFFFF;
-    color: #0066FF;
     display: inline-block;
     width: 15px;
     height: 15px;
     border:solid 2px #0066FF;
-    margin: -2px;
     border-radius: 50%; 
 }
-.user-check{
+
+.choice .user-check{
     padding-left: 2px;
+    position: absolute;
 }
+
 .user-check span::before {
     width: 6px;
     height: 12px;
@@ -160,6 +163,10 @@ main #inContent .answer1-item .question-explanation .explanation{
     content: "";
     display: inline-block;
     color: rgb(51,102,204);
+}
+span.choice-sentence {
+    display:inline-block;
+    padding-left: 27px;
 }
 
 #retest{

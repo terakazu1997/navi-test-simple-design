@@ -29,33 +29,33 @@ const answerSample1 = {
                     <li class="answer1-item" v-for="(questionObject,index) in questionObjects" :key="questionObject.questionId">
                         <div class="question">
                             <div class="question-number"><span>Q{{index + 1}}</span></div>
-                            <div class="question-sentence"><span>{{questionObject.question}}</span></div>
+                            <div class="question-sentence"><span v-html="questionObject.question" /></div>
                         </div>
                         <div class="choices">
                             <div class="users-answer">
-                                <p>あなたの回答</p>
+                                <p class="answer-title">あなたの回答</p>
                                 <ul>
-                                    <li v-for="(choice,choiceIndex) in questionObject.choices" :key="choiceIndex">
+                                    <li class="choice" v-for="(choice,choiceIndex) in questionObject.choices" :key="choiceIndex">
                                         <span v-if="questionObject.answerStatus[choiceIndex]==='ユーザの選択' " class="user-check"><span /></span>
                                         <span v-else class="no-check" /></span>
-                                        {{choice}}
+                                        <span class="choice-sentence" v-html="choice" />
                                     </li>
                                 </ul>
                             </div>
                             <div class="pass-answer">
-                                <p>正答</p>
+                                <p class="answer-title">正答</p>
                                 <ul>
-                                    <li v-for="(choice,choiceIndex) in questionObject.choices" :key="choiceIndex">
+                                    <li class="choice" v-for="(choice,choiceIndex) in questionObject.choices" :key="choiceIndex">
                                         <span v-if="questionObject.answer.indexOf(choiceIndex) !== -1" class="pass-check"><span class="small-circle"></span></span>
                                         <span v-else class="no-check" /></span>
-                                        {{choice}}
+                                        <span class="choice-sentence"  v-html="choice" />
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <div class="question-explanation">
                             <p class="explanation-title">解説</p>
-                            <p class="explanation">{{questionObject.answerSentence}}</p>
+                            <p class="explanation" v-html="questionObject.answerSentence" />
                         </div>
                     </li>
                 </ul>
